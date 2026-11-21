@@ -85,11 +85,12 @@ with st.sidebar:
     health = check_backend()
     if health:
         st.success("API online")
-        st.caption(f"Gemini ({health['model']}): {'✅ configured' if health['gemini_configured'] else '❌ API key missing'}  \n"
-                   f"Database: {'✅ on' if health['database'] else '⚪ off'}")
+        ai_configured = health.get("gemini_configured", health.get("groq_configured", False))
+        st.caption(f"Gemini ({health.get('model', 'unknown')}): {'✅ configured' if ai_configured else '❌ API key missing'}  \n"
+                   f"Database: {'✅ on' if health.get('database') else '⚪ off'}")
     else:
         st.error(f"API offline or waking up ({API_URL})")
-    use_llm = st.toggle("AI insights (Gemini)", value=bool(health and health.get("gemini_configured")),
+    use_llm = st.toggle("AI insights (Gemini)", value=bool(health and health.get("gemini_configured", health.get("groq_configured", False))),
                         help="Adds an AI summary, bullet rewrites and tailored interview questions.")
     if health and health.get("database"):
         try:
