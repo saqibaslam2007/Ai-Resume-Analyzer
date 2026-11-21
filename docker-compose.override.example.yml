@@ -1,0 +1,8 @@
+# Rename to docker-compose.override.yml to run without the Postgres container
+# and without history persistence.
+#
+# services:
+#   backend:
+#     environment:
+#       DATABASE_URL: ""
+#     depends_on: []
